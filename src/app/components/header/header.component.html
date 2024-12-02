@@ -1,1 +1,7 @@
-<p>header works!</p>
+<mat-toolbar>
+  <span class="title" (click)="navigateTo('/')">Info stream</span>
+
+  <span class="spacer"></span>
+
+  <button mat-button (click)="navigateTo('login')"><mat-icon>login</mat-icon>Login</button>
+</mat-toolbar>

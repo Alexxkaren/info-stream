@@ -1,0 +1,24 @@
+<mat-card class="card" appearance="outlined">
+  <mat-card-header>
+    <mat-card-title class="title">Prihlásenie</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="inputs">
+      <mat-form-field>
+        <mat-label>Username</mat-label>
+        <input matInput />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input matInput [type]="hide() ? 'password' : 'text'" />
+        <button mat-icon-button matSuffix (click)="clickEvent($event)">
+          <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+  <mat-card-actions class="actions">
+    <button mat-button class="login_button">Login</button>
+  </mat-card-actions>
+</mat-card>
