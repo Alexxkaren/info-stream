@@ -1,7 +1,14 @@
 <mat-toolbar>
-  <span class="title" (click)="navigateTo('/')">Info stream</span>
+  <img
+    src="images/logo-rb.png"
+    alt="logo"
+    (click)="navigateTo('/')"
+    class="title"
+  />
 
   <span class="spacer"></span>
 
-  <button mat-button (click)="navigateTo('login')"><mat-icon>login</mat-icon>Login</button>
+  <button mat-button (click)="navigateTo('login')">
+    <mat-icon>login</mat-icon>Login
+  </button>
 </mat-toolbar>
