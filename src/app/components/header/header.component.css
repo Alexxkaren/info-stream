@@ -3,4 +3,6 @@
 }
 .title {
   cursor: pointer;
+  width: 140px;
+  height: 80px;
 }
