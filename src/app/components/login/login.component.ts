@@ -7,6 +7,8 @@ import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { UserService } from '../../services/user-service/user.service';
 import { UserLoginDtoIn } from '../../models/user/user.module';
+import { MessageService } from '../../services/message-service/message.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +19,7 @@ import { UserLoginDtoIn } from '../../models/user/user.module';
     MatInputModule,
     MatButtonModule,
     MatIcon,
-    FormsModule, // Required for [(ngModel)]
+    FormsModule,
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
@@ -25,7 +27,7 @@ import { UserLoginDtoIn } from '../../models/user/user.module';
 export class LoginComponent {
   userLogin: UserLoginDtoIn = { username: '', password: '' };
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   hide = signal(true);
 
@@ -38,7 +40,7 @@ export class LoginComponent {
     this.userService
       .login(this.userLogin.username, this.userLogin.password)
       .subscribe((data) => {
-        console.log(data); // Handle the response from the backend
+        console.log(data);
       });
   }
 }
