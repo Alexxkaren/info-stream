@@ -1,13 +1,17 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
-import { catchError, EMPTY, Observable, tap } from 'rxjs';
+import {  Injectable, signal } from '@angular/core';
+import { BehaviorSubject, catchError, EMPTY, Observable, tap } from 'rxjs';
 import { MessageService } from '../message-service/message.service';
 import { Router } from '@angular/router';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  private isLoggedInSubject = new BehaviorSubject<boolean>(this.isLoggedIn());
+  isLoggedIn$ = this.isLoggedInSubject.asObservable();
+
   constructor(
     private httpClient: HttpClient,
     private messageService: MessageService,
@@ -28,6 +32,7 @@ export class UserService {
         tap((response: any) => {
           if (response.token) {
             localStorage.setItem('token', response.token);
+            this.isLoggedInSubject.next(true);
             this.messageService.success('User ' + username + ' was logged in');
           }
           this.navigateTo('/');
@@ -36,11 +41,19 @@ export class UserService {
       );
   }
 
+  logout(): void {
+    localStorage.removeItem('token');
+    this.isLoggedInSubject.next(false);
+    this.messageService.success('User logged out');
+    this.navigateTo('/login');
+  }
+
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem('token');
+  }
+
   errorHandling(err: any): Observable<never> {
     if (err instanceof HttpErrorResponse) {
-      if (err.status >= 400 && err.status < 500) {
-        this.messageService.error('Invalid username or password');
-      }
       if (err.status >= 400 && err.status < 500) {
         this.messageService.error('Invalid username or password');
       } else {

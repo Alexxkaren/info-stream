@@ -3,6 +3,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { UserService } from '../../services/user-service/user.service';
 @Component({
   selector: 'app-header',
   imports: [MatToolbarModule, MatButtonModule, MatIconModule],
@@ -10,11 +11,22 @@ import { Router } from '@angular/router';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
+  isLoggedIn: boolean = false;
 
-  constructor(private router: Router) { }
+  constructor(private userService: UserService) {}
 
-  navigateTo(page: string): void {
-    this.router.navigate([page]);
+  ngOnInit(): void {
+    this.userService.isLoggedIn$.subscribe((status) => {
+      this.isLoggedIn = status;
+    });
   }
 
+  logout(): void {
+    this.userService.logout();
+    this.navigateTo('/');
+  }
+
+  navigateTo(page: string): void {
+    this.userService.navigateTo(page);
+  }
 }
