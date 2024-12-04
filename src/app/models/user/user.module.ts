@@ -1,6 +1,7 @@
-interface UserDataDtoBase {
-  id: number;
+export interface UserLoginDtoIn {
   username: string;
   password: string;
-  role: string;
+}
+export interface UserLoginDtoOut {
+  token: string;
 }
