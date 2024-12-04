@@ -9,7 +9,7 @@ export class UserService {
 
   constructor(private httpClient: HttpClient) { }
 
-  serverUrl: string = "http://localhost:5000";
+  serverUrl: string = "http://infostream-core-gdaxc8guf3cpe5dz.westeurope-01.azurewebsites.net";
 
   login(username: string, password: string): Observable<any> {
     return this.httpClient.post(`${this.serverUrl}/login`, { username, password });
