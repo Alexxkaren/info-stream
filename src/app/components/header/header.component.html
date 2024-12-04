@@ -8,7 +8,13 @@
 
   <span class="spacer"></span>
 
-  <button mat-button (click)="navigateTo('login')">
-    <mat-icon>login</mat-icon>Admin
-  </button>
+  @if (isLoggedIn) {
+    <button mat-button (click)="logout()">
+      <mat-icon>logout</mat-icon>Logout
+    </button>
+  } @else {
+    <button mat-button (click)="navigateTo('login')">
+      <mat-icon>login</mat-icon>Admin
+    </button>
+  }
 </mat-toolbar>
