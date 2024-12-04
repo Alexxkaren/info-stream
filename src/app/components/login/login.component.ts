@@ -1,4 +1,5 @@
 import { Component, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,15 +10,17 @@ import { UserLoginDtoIn } from '../../models/user/user.module';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     MatIcon,
+    FormsModule, // Required for [(ngModel)]
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   userLogin: UserLoginDtoIn = { username: '', password: '' };
@@ -35,7 +38,7 @@ export class LoginComponent {
     this.userService
       .login(this.userLogin.username, this.userLogin.password)
       .subscribe((data) => {
-        console.log(data);
+        console.log(data); // Handle the response from the backend
       });
   }
 }
