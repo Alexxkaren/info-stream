@@ -35,7 +35,7 @@ export class UserService {
             this.isLoggedInSubject.next(true);
             this.messageService.success('User ' + username + ' was logged in');
           }
-          this.navigateTo('/');
+          this.navigateTo('/admin');
         }),
         catchError((error) => this.errorHandling(error))
       );
