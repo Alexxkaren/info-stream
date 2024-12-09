@@ -29,12 +29,7 @@ export class LoginComponent {
 
   constructor(private userService: UserService, private router: Router) {}
 
-  hide = signal(true);
-
-  clickEvent(event: MouseEvent) {
-    this.hide.set(!this.hide());
-    event.stopPropagation();
-  }
+  hide: boolean = true;
 
   login(): void {
     this.userService

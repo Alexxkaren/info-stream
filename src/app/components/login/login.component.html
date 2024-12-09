@@ -6,14 +6,25 @@
     <div class="inputs">
       <mat-form-field>
         <mat-label>Username</mat-label>
-        <input matInput [(ngModel)]="userLogin.username" />
+        <input
+          matInput
+          [(ngModel)]="userLogin.username"
+          name="username"
+          placeholder="Write username"
+        />
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Password</mat-label>
-        <input matInput [(ngModel)]="userLogin.password" [type]="hide() ? 'password' : 'text'" />
-        <button mat-icon-button matSuffix (click)="clickEvent($event)">
-          <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
+        <input
+          matInput
+          [(ngModel)]="userLogin.password"
+          [type]="hide ? 'password' : 'text'"
+          name="passwod"
+          placeholder="Write password"
+        />
+        <button mat-icon-button matSuffix (click)="hide = !hide">
+          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
         </button>
       </mat-form-field>
     </div>
