@@ -2,12 +2,14 @@
   <header class="section">
     <h1>Vitajte na Spravodajskom Portáli</h1>
     <p>
-      Prinášame vám aktuálne správy, zaujímavosti a analýzy zo všetkých oblastí života.
+      Prinášame vám aktuálne správy, zaujímavosti a analýzy zo všetkých oblastí
+      života.
     </p>
   </header>
 
   <section class="articles-section">
-    <div class="article-card" *ngFor="let article of articles">
+    <div class="articles-container">
+      @for(article of articles; track article.id){
       <mat-card class="article-card">
         <mat-card-header>
           <mat-card-title>{{ article.title }}</mat-card-title>
@@ -17,6 +19,7 @@
           <p>{{ article.content }}</p>
         </mat-card-content>
       </mat-card>
+      }
     </div>
   </section>
 </div>

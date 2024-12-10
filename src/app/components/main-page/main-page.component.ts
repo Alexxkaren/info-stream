@@ -6,10 +6,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { ArticleService } from '../../services/article-service/article.service';
-import { UserLoginDtoIn } from '../../models/user/user.module';
+import { UserLoginDtoIn } from '../../models/user/user';
 import { MessageService } from '../../services/message-service/message.service';
 import { Router } from '@angular/router';
-import { ArticleDataDtoBase } from '../../models/article/article.module';
+import { ArticleDataDtoBase } from '../../models/article/article';
 import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 
@@ -26,7 +26,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './main-page.component.css',
 })
 export class MainPageComponent implements OnInit {
-  articles: ArticleDataDtoBase[] = []; // This will store the fetched articles
+  articles: ArticleDataDtoBase[] = [];
 
   constructor(private articleService: ArticleService, private router: Router) {}
 
@@ -34,7 +34,7 @@ export class MainPageComponent implements OnInit {
     this.articleService.getAllArticles().subscribe(
       (response) => {
         console.log('Fetched Articles:', response);
-        this.articles = response.articles; // Assuming 'data' contains the array
+        this.articles = response.articles;
       },
       (error) => {
         console.error('Error fetching articles:', error);

@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { UserService } from '../../services/user-service/user.service';
-import { UserLoginDtoIn } from '../../models/user/user.module';
+import { UserLoginDtoIn } from '../../models/user/user';
 import { MessageService } from '../../services/message-service/message.service';
 import { Router } from '@angular/router';
 
