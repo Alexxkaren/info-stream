@@ -28,3 +28,13 @@
 mat-card {
   padding: 16px;
 }
+
+.article-card {
+  margin-bottom: 16px;
+}
+
+mat-card {
+  width: 100%;
+  max-width: 600px;
+  margin: 16px auto;
+}

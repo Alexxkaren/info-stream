@@ -1,12 +1,45 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { ArticleService } from '../../services/article-service/article.service';
+import { UserLoginDtoIn } from '../../models/user/user.module';
+import { MessageService } from '../../services/message-service/message.service';
+import { Router } from '@angular/router';
+import { ArticleDataDtoBase } from '../../models/article/article.module';
+import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-main-page',
-  imports: [MatCardModule],
+  imports: [    
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    FormsModule,
+    CommonModule,],
   templateUrl: './main-page.component.html',
-  styleUrl: './main-page.component.css'
+  styleUrl: './main-page.component.css',
 })
-export class MainPageComponent {
+export class MainPageComponent implements OnInit {
+  articles: ArticleDataDtoBase[] = []; // This will store the fetched articles
 
+  constructor(private articleService: ArticleService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.articleService.getAllArticles().subscribe(
+      (response) => {
+        console.log('Fetched Articles:', response);
+        this.articles = response.articles; // Assuming 'data' contains the array
+      },
+      (error) => {
+        console.error('Error fetching articles:', error);
+      }
+    );
+  }
+  
 }

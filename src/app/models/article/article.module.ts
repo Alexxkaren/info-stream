@@ -1,4 +1,4 @@
-interface ArticleDataDtoBase {
+export interface ArticleDataDtoBase {
   id: number;
   title: string;
   content: string;
