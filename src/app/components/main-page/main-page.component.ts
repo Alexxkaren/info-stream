@@ -6,12 +6,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { ArticleService } from '../../services/article-service/article.service';
-import { UserLoginDtoIn } from '../../models/user/user';
-import { MessageService } from '../../services/message-service/message.service';
 import { Router } from '@angular/router';
-import { ArticleDataDtoBase } from '../../models/article/article';
-import { BrowserModule } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
+import { ArticleDataDtoBase } from '../../models/article/article';
 
 @Component({
   selector: 'app-main-page',
@@ -34,7 +31,7 @@ export class MainPageComponent implements OnInit {
     this.articleService.getAllArticles().subscribe(
       (response) => {
         console.log('Fetched Articles:', response);
-        this.articles = response.articles;
+        this.articles = response.articles; 
       },
       (error) => {
         console.error('Error fetching articles:', error);
