@@ -1,6 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { FormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
@@ -9,30 +21,67 @@ import { ArticleService } from '../../services/article-service/article.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ArticleDataDtoBase } from '../../models/article/article';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogContent,
+  MatDialogTitle,
+} from '@angular/material/dialog';
+import { BrowserModule } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-admin',
-  imports: [    
+  imports: [
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     MatIcon,
     FormsModule,
-    CommonModule,],
+    CommonModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './admin.component.html',
-  styleUrl: './admin.component.css'
+  styleUrl: './admin.component.css',
 })
 export class AdminComponent {
+  @ViewChild('dialogTemplateRegister')
+  dialogTemplateRegister!: TemplateRef<any>;
+
   articles: ArticleDataDtoBase[] = [];
+  dialog = inject(MatDialog);
 
   constructor(private articleService: ArticleService, private router: Router) {}
+
+  regForm = new FormGroup({
+    title: new FormControl<string>('', {
+      validators: [Validators.required, Validators.minLength(3)],
+    }),
+    category: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+    ]),
+    content: new FormControl('', [
+      Validators.required,
+      Validators.minLength(10),
+    ]),
+  });
+
+  get title() {
+    return this.regForm.get('title');
+  }
+  get category() {
+    return this.regForm.get('category');
+  }
+  get content() {
+    return this.regForm.get('content');
+  }
 
   ngOnInit(): void {
     this.articleService.getAllArticles().subscribe(
       (response) => {
         console.log('Fetched Articles:', response);
-        this.articles = response.articles; 
+        this.articles = response.articles;
       },
       (error) => {
         console.error('Error fetching articles:', error);
@@ -44,17 +93,46 @@ export class AdminComponent {
     console.log('Update article:', article);
     this.router.navigate(['/edit-article', article.id]);
   }
-  
+
   deleteArticle(articleId: number): void {
     console.log('Delete article with ID:', articleId);
     this.articleService.deleteArticle(articleId).subscribe(
       () => {
         console.log('Article deleted successfully');
-        this.articles = this.articles.filter(article => article.id !== articleId);
+        this.articles = this.articles.filter(
+          (article) => article.id !== articleId
+        );
       },
       (error) => {
         console.error('Error deleting article:', error);
       }
     );
+  }
+
+  openDialog(): void {
+    this.dialog.open(this.dialogTemplateRegister, {
+      width: '600px',
+    });
+  }
+
+  closeDialog(): void {
+    this.dialog.closeAll();
+  }
+
+  submit() {
+    if (this.regForm.valid) {
+      console.log('Form data:', this.regForm.value);
+      this.dialog.closeAll();
+      this.articleService.addArticle(this.regForm.value).subscribe(
+        () => {
+          console.log('Article added successfully');
+        },
+        (error) => {
+          console.error('Error adding article:', error);
+        }
+      );
+    } else {
+      console.error('Form is invalid');
+    }
   }
 }
