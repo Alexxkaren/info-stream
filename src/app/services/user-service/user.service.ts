@@ -33,7 +33,7 @@ export class UserService {
           if (response.token) {
             localStorage.setItem('token', response.token);
             this.isLoggedInSubject.next(true);
-            this.messageService.success('User ' + username + ' was logged in');
+            this.messageService.success('Používateľ ' + username + ' bol úspešne prihlásený');
           }
           this.navigateTo('/admin');
         }),
@@ -44,7 +44,7 @@ export class UserService {
   logout(): void {
     localStorage.removeItem('token');
     this.isLoggedInSubject.next(false);
-    this.messageService.success('User logged out');
+    this.messageService.success('Používateľ bol úspešne odhlásený');
     this.navigateTo('/login');
   }
 
@@ -55,7 +55,7 @@ export class UserService {
   errorHandling(err: any): Observable<never> {
     if (err instanceof HttpErrorResponse) {
       if (err.status >= 400 && err.status < 500) {
-        this.messageService.error('Invalid username or password');
+        this.messageService.error('Zlé prihlasovacie údaje');
       } else {
         this.messageService.error('Server error');
       }

@@ -5,23 +5,23 @@
   <mat-card-content>
     <div class="inputs">
       <mat-form-field>
-        <mat-label>Username</mat-label>
+        <mat-label>Prihlasovacie meno</mat-label>
         <input
           matInput
           [(ngModel)]="userLogin.username"
           name="username"
-          placeholder="Write username"
+          placeholder="Napíšte svoje meno"
         />
       </mat-form-field>
 
       <mat-form-field>
-        <mat-label>Password</mat-label>
+        <mat-label>Heslo</mat-label>
         <input
           matInput
           [(ngModel)]="userLogin.password"
           [type]="hide ? 'password' : 'text'"
           name="passwod"
-          placeholder="Write password"
+          placeholder="Napíšte svoje heslo"
         />
         <button mat-icon-button matSuffix (click)="hide = !hide">
           <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>

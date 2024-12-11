@@ -15,28 +15,25 @@ export class ArticleService {
     private router: Router
   ) {}
 
-  // URL to your Flask server
   serverUrl: string = 'http://infostream-core-gdaxc8guf3cpe5dz.westeurope-01.azurewebsites.net';
 
-  // Retrieve all articles
   getAllArticles(): Observable<any> {
     return this.httpClient
       .get(`${this.serverUrl}/articles`)
       .pipe(
         tap((response: any) => {
           if (response.articles) {
-            this.messageService.success('Articles loaded');
+            this.messageService.success('Články sa načítali');
           }
         }),
         catchError((error) => this.errorHandling(error))
       );
   }
 
-  // Add a new article (requires JWT token for authorization)
   addArticle(article: any): Observable<any> {
-    const token = localStorage.getItem('token');  // Assuming token is saved in localStorage after login
+    const token = localStorage.getItem('token');  
     if (!token) {
-      this.messageService.error('No authorization token found');
+      this.messageService.error('Neexistuje autorizačný token');
       return EMPTY;
     }
 
@@ -45,7 +42,7 @@ export class ArticleService {
         headers: { Authorization: `Bearer ${token}` }
       })
       .pipe(
-        tap(() => this.messageService.success('Article added')),
+        tap(() => this.messageService.success('Článok bol pridaný')),
         catchError((error) => this.errorHandling(error))
       );
   }
@@ -53,7 +50,7 @@ export class ArticleService {
   deleteArticle(articleId: number): Observable<any> {
     const token = localStorage.getItem('token');
     if (!token) {
-      this.messageService.error('No authorization token found');
+      this.messageService.error('Neexistuje autorizačný token');
       return EMPTY;
     }
 
@@ -62,7 +59,7 @@ export class ArticleService {
         headers: { Authorization: `Bearer ${token}` }
       })
       .pipe(
-        tap(() => this.messageService.success('Article deleted')),
+        tap(() => this.messageService.success('Článok bol zmazaný')),
         catchError((error) => this.errorHandling(error))
       );
   }
@@ -70,7 +67,7 @@ export class ArticleService {
   updateArticle(articleId: number, article: any): Observable<any> {
     const token = localStorage.getItem('token');
     if (!token) {
-      this.messageService.error('No authorization token found');
+      this.messageService.error('Neexistuje autorizačný token');
       return EMPTY;
     }
 
@@ -79,7 +76,7 @@ export class ArticleService {
         headers: { Authorization: `Bearer ${token}` }
       })
       .pipe(
-        tap(() => this.messageService.success('Article updated')),
+        tap(() => this.messageService.success('Článok bol upravený')),
         catchError((error) => this.errorHandling(error))
       );
   }
@@ -88,7 +85,7 @@ export class ArticleService {
   errorHandling(err: any): Observable<never> {
     if (err instanceof HttpErrorResponse) {
       if (err.status >= 400 && err.status < 500) {
-        this.messageService.error('Bad request for articles');
+        this.messageService.error('Zlá požiadavka pre server');
       } else {
         this.messageService.error('Server error');
       }
