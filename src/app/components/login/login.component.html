@@ -1,35 +1,48 @@
 <mat-card class="card" appearance="outlined">
   <mat-card-header>
-    <mat-card-title class="title">Prihlásenie</mat-card-title>
+    <mat-card-title class="title">Login</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <div class="inputs">
-      <mat-form-field>
-        <mat-label>Prihlasovacie meno</mat-label>
-        <input
-          matInput
-          [(ngModel)]="userLogin.username"
-          name="username"
-          placeholder="Napíšte svoje meno"
-        />
-      </mat-form-field>
+    <form [formGroup]="regForm">
+      <div class="inputs">
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input
+            matInput
+            formControlName="name"
+            placeholder="Write your name"
+          />
+          @if (name?.hasError('required')) {
+          <mat-error>Name is required</mat-error>
+          }
+        </mat-form-field>
 
-      <mat-form-field>
-        <mat-label>Heslo</mat-label>
-        <input
-          matInput
-          [(ngModel)]="userLogin.password"
-          [type]="hide ? 'password' : 'text'"
-          name="passwod"
-          placeholder="Napíšte svoje heslo"
-        />
-        <button mat-icon-button matSuffix (click)="hide = !hide">
-          <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
-        </button>
-      </mat-form-field>
-    </div>
+        <mat-form-field>
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            formControlName="password"
+            [type]="hide ? 'password' : 'text'"
+            placeholder="Write your password"
+          />
+          @if (password?.hasError('required')) {
+          <mat-error>Password is required</mat-error>
+          }
+          <button mat-icon-button matSuffix (click)="hide = !hide">
+            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </form>
   </mat-card-content>
   <mat-card-actions class="actions">
-    <button mat-button class="login_button" (click)="login()">Login</button>
+    <button
+      mat-button
+      class="login_button"
+      (click)="login()"
+      [disabled]="!regForm.valid"
+    >
+      Login
+    </button>
   </mat-card-actions>
 </mat-card>
