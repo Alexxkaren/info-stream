@@ -28,6 +28,7 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { BrowserModule } from '@angular/platform-browser';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-admin',
@@ -40,6 +41,7 @@ import { BrowserModule } from '@angular/platform-browser';
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
+    MatPaginatorModule
   ],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css',
@@ -50,6 +52,10 @@ export class AdminComponent {
 
   articles: ArticleDataDtoBase[] = [];
   dialog = inject(MatDialog);
+  displayedArticles: ArticleDataDtoBase[] = [];
+  pageSize = 5;
+  currentPage = 0;
+  totalArticles = 0;
 
   constructor(private articleService: ArticleService, private router: Router) {}
 
@@ -82,6 +88,8 @@ export class AdminComponent {
       (response) => {
         console.log('Fetched Articles:', response);
         this.articles = response.articles;
+        this.totalArticles = response.articles.length;
+        this.updateDisplayedArticles();
       },
       (error) => {
         console.error('Error fetching articles:', error);
@@ -135,4 +143,16 @@ export class AdminComponent {
       console.error('Form is invalid');
     }
   }
+
+   onPageChange(event: PageEvent): void {
+      this.pageSize = event.pageSize;
+      this.currentPage = event.pageIndex;
+      this.updateDisplayedArticles();
+    }
+  
+    private updateDisplayedArticles(): void {
+      const startIndex = this.currentPage * this.pageSize;
+      const endIndex = startIndex + this.pageSize;
+      this.displayedArticles = this.articles.slice(startIndex, endIndex);
+    }
 }

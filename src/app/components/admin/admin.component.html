@@ -1,16 +1,16 @@
 <div>
   <header class="section">
     <h1>Admin panel</h1>
-    <p>Tu môžete spravovať články.</p>
+    <p>Here you can manage articles.</p>
   </header>
   <div class="add-article-button">
     <button mat-raised-button color="primary" (click)="openDialog()">
-      Pridať článok
+      Add an article
     </button>
   </div>
   <section class="articles-section">
     <div class="articles-container">
-      @for (article of articles; track article.id) {
+      @for (article of displayedArticles; track article.id) {
       <mat-card class="article-card">
         <mat-card-header>
           <mat-card-title class="card-title">
@@ -37,44 +37,57 @@
 
 <ng-template #dialogTemplateRegister let-data>
   <form [formGroup]="regForm" class="dialog-container" (ngSubmit)="submit()">
-    <h2>Pridajte článok</h2>
+    <h2>Add an article</h2>
     <mat-form-field>
-      <input matInput placeholder="Názov" formControlName="title" required />
+      <input matInput placeholder="Name" formControlName="title" required />
       @if(title?.errors?.['required']){
-      <mat-error>Názov je povinný</mat-error>
+      <mat-error>Name is required</mat-error>
       } @else{
-      <mat-error>Názov musí mať aspoň 3 znaky</mat-error>
+      <mat-error>The name must have at least 3 characters</mat-error>
       }
     </mat-form-field>
     <mat-form-field>
       <input
         matInput
-        placeholder="Kategória"
+        placeholder="Category"
         formControlName="category"
         required
       />
       @if(category?.errors?.['required']){
-      <mat-error>Kategória je povinná</mat-error>
-      } @else{
-      <mat-error>Kategória musí mať aspoň 3 znaky</mat-error>
+      <mat-error>Category is required</mat-error>
       }
     </mat-form-field>
     <mat-form-field>
       <textarea
         matInput
-        placeholder="Obsah"
+        placeholder="Content"
         formControlName="content"
         required
       ></textarea>
       @if(content?.errors?.['required']){
-      <mat-error>Obsah je povinný</mat-error>
+      <mat-error>Content is required</mat-error>
       } @else{
-      <mat-error>Obsah musí mať aspoň 10 znakov</mat-error>
+      <mat-error>Content must be at least 10 characters long</mat-error>
       }
     </mat-form-field>
     <div class="dialog-buttons">
-      <button mat-raised-button (click)="closeDialog()">Zrušiť</button>
-      <button mat-raised-button color="primary" type="submit">Pridať</button>
+      <button mat-raised-button (click)="closeDialog()">Cancel</button>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="!regForm.valid"
+      >
+        Add
+      </button>
     </div>
   </form>
 </ng-template>
+
+<mat-paginator
+  [length]="totalArticles"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="[5, 15, 25, 30]"
+  aria-label="Select page"
+  (page)="onPageChange($event)"
+></mat-paginator>

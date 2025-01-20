@@ -1,5 +1,11 @@
 import { Component, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,6 +25,7 @@ import { Router } from '@angular/router';
     MatButtonModule,
     MatIcon,
     FormsModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
@@ -30,11 +37,32 @@ export class LoginComponent {
 
   hide: boolean = true;
 
+  regForm = new FormGroup({
+    name: new FormControl<string>('', {
+      validators: [Validators.required],
+    }),
+    password: new FormControl('', [Validators.required]),
+  });
+
+  get name() {
+    return this.regForm.get('name');
+  }
+
+  get password() {
+    return this.regForm.get('password');
+  }
+
   login(): void {
-    this.userService
-      .login(this.userLogin.username, this.userLogin.password)
-      .subscribe((data) => {
-        console.log(data);
-      });
+    if (this.regForm.valid) {
+      this.userLogin.username = this.name?.value || '';
+      this.userLogin.password = this.password?.value || '';
+
+      this.userService
+        .login(this.userLogin.username, this.userLogin.password)
+        .subscribe((data) => {
+          console.log(data);
+          this.router.navigate(['/admin']);
+        });
+    }
   }
 }

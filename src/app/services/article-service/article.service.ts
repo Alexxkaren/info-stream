@@ -23,7 +23,7 @@ export class ArticleService {
       .pipe(
         tap((response: any) => {
           if (response.articles) {
-            this.messageService.success('Články sa načítali');
+            this.messageService.success('Articles have been loaded');
           }
         }),
         catchError((error) => this.errorHandling(error))
@@ -33,7 +33,7 @@ export class ArticleService {
   addArticle(article: any): Observable<any> {
     const token = localStorage.getItem('token');  
     if (!token) {
-      this.messageService.error('Neexistuje autorizačný token');
+      this.messageService.error('There is no authorization token');
       return EMPTY;
     }
 
@@ -42,7 +42,7 @@ export class ArticleService {
         headers: { Authorization: `Bearer ${token}` }
       })
       .pipe(
-        tap(() => this.messageService.success('Článok bol pridaný')),
+        tap(() => this.messageService.success('Article has been added')),
         catchError((error) => this.errorHandling(error))
       );
   }
@@ -50,7 +50,7 @@ export class ArticleService {
   deleteArticle(articleId: number): Observable<any> {
     const token = localStorage.getItem('token');
     if (!token) {
-      this.messageService.error('Neexistuje autorizačný token');
+      this.messageService.error('There is no authorization token');
       return EMPTY;
     }
 
@@ -59,7 +59,7 @@ export class ArticleService {
         headers: { Authorization: `Bearer ${token}` }
       })
       .pipe(
-        tap(() => this.messageService.success('Článok bol zmazaný')),
+        tap(() => this.messageService.success('The article has been deleted')),
         catchError((error) => this.errorHandling(error))
       );
   }
@@ -67,7 +67,7 @@ export class ArticleService {
   updateArticle(articleId: number, article: any): Observable<any> {
     const token = localStorage.getItem('token');
     if (!token) {
-      this.messageService.error('Neexistuje autorizačný token');
+      this.messageService.error('There is no authorization token');
       return EMPTY;
     }
 
@@ -76,7 +76,7 @@ export class ArticleService {
         headers: { Authorization: `Bearer ${token}` }
       })
       .pipe(
-        tap(() => this.messageService.success('Článok bol upravený')),
+        tap(() => this.messageService.success('The article has been edited')),
         catchError((error) => this.errorHandling(error))
       );
   }
@@ -85,7 +85,7 @@ export class ArticleService {
   errorHandling(err: any): Observable<never> {
     if (err instanceof HttpErrorResponse) {
       if (err.status >= 400 && err.status < 500) {
-        this.messageService.error('Zlá požiadavka pre server');
+        this.messageService.error('Bad request to server');
       } else {
         this.messageService.error('Server error');
       }

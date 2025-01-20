@@ -37,3 +37,14 @@ mat-card {
   max-width: 600px;
   margin: 16px auto;
 }
+
+.mat-icon {
+  position: relative;
+  top: -3px;
+  margin-right: 8px;
+}
+
+mat-paginator {
+  position: relative;
+  margin-top: 100px;
+}

@@ -1,25 +1,41 @@
 <div class="main-container">
   <header class="section">
-    <h1>Vitajte na Spravodajskom Portáli</h1>
+    <h1>Welcome to the News Portal</h1>
     <p>
-      Prinášame vám aktuálne správy, zaujímavosti a analýzy zo všetkých oblastí
-      života.
+      We bring you current news, interesting facts and analyzes from all areas.
     </p>
   </header>
 
   <section class="articles-section">
     <div class="articles-container">
-      @for(article of articles; track article.id){
+      @for (article of displayedArticles; track article.id) {
       <mat-card class="article-card">
         <mat-card-header>
           <mat-card-title>{{ article.title }}</mat-card-title>
           <mat-card-subtitle>{{ article.category }}</mat-card-subtitle>
+          <button mat-icon-button (click)="toggleArticle(article.id)">
+            @if (expandedArticles[article.id]){
+            <mat-icon> arrow_upward_alt </mat-icon>
+            } @else{
+            <mat-icon> arrow_downward_alt </mat-icon>
+            }
+          </button>
         </mat-card-header>
         <mat-card-content>
+          @if (expandedArticles[article.id]) {
           <p>{{ article.content }}</p>
+          }
         </mat-card-content>
       </mat-card>
       }
     </div>
   </section>
 </div>
+
+<mat-paginator
+  [length]="totalArticles"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="[5, 15, 25, 30]"
+  aria-label="Select page"
+  (page)="onPageChange($event)"
+></mat-paginator>
