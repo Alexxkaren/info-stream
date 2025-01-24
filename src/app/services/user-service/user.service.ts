@@ -3,6 +3,7 @@ import {  Injectable, signal } from '@angular/core';
 import { BehaviorSubject, catchError, EMPTY, Observable, tap } from 'rxjs';
 import { MessageService } from '../message-service/message.service';
 import { Router } from '@angular/router';
+import { UserLoginDtoOut } from '../../models/user/user';
 
 
 @Injectable({
@@ -24,20 +25,20 @@ export class UserService {
     this.router.navigate([page]);
   }
 
-  login(username: string, password: string): Observable<any> {
-    return this.httpClient
-      .post(`${this.serverUrl}/login`, { username, password })
-      .pipe(
-        tap((response: any) => {
-          if (response.token) {
-            localStorage.setItem('token', response.token);
-            this.isLoggedInSubject.next(true);
-            this.messageService.success('User ' + username + ' was successfully logged in');
-          }
-        }),
-        catchError((error) => this.errorHandling(error))
-      );
-  }
+  login(username: string, password: string): Observable<UserLoginDtoOut> {
+      return this.httpClient
+        .post<UserLoginDtoOut>(`${this.serverUrl}/login`, { username, password })
+        .pipe(
+          tap((response: UserLoginDtoOut) => {
+            if (response.token) {
+              localStorage.setItem('token', response.token);
+              this.isLoggedInSubject.next(true);
+              this.messageService.success('User ' + username + ' was successfully logged in');
+            }
+          }),
+          catchError((error) => this.errorHandling(error))
+        );
+    }
 
   logout(): void {
     localStorage.removeItem('token');

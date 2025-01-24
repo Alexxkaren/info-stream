@@ -4,3 +4,7 @@ export interface ArticleDataDtoBase {
   content: string;
   category: string;
 }
+
+export interface ArticlesResponse {
+  articles: ArticleDataDtoBase[];
+}

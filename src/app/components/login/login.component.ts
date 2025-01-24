@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -60,7 +60,6 @@ export class LoginComponent {
       this.userService
         .login(this.userLogin.username, this.userLogin.password)
         .subscribe((data) => {
-          console.log(data);
           this.router.navigate(['/admin']);
         });
     }

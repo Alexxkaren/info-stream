@@ -21,15 +21,10 @@ import { ArticleService } from '../../services/article-service/article.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ArticleDataDtoBase } from '../../models/article/article';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogContent,
-  MatDialogTitle,
-} from '@angular/material/dialog';
-import { BrowserModule } from '@angular/platform-browser';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
+import { MessageService } from '../../services/message-service/message.service';
 
 @Component({
   selector: 'app-admin',
@@ -43,12 +38,12 @@ import { MatSelectModule } from '@angular/material/select';
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
-    MatPaginatorModule
+    MatPaginatorModule,
   ],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.css',
 })
-export class AdminComponent {
+export class AdminComponent implements OnInit {
   @ViewChild('dialogTemplateRegister')
   dialogTemplateRegister!: TemplateRef<any>;
 
@@ -58,11 +53,13 @@ export class AdminComponent {
   pageSize = 5;
   currentPage = 0;
   totalArticles = 0;
-categories: string[] = ['Technology', 'Science', 'Art', 'Health', 'Sports'];
-editingArticleId: number | null = null;
+  categories: string[] = ['Technology', 'Science', 'Art', 'Health', 'Sports'];
+  editingArticleId: number | null = null;
 
-
-  constructor(private articleService: ArticleService, private router: Router) {}
+  constructor(
+    private articleService: ArticleService,
+    private messageService: MessageService
+  ) {}
 
   regForm = new FormGroup({
     title: new FormControl<string>('', {
@@ -91,13 +88,14 @@ editingArticleId: number | null = null;
   ngOnInit(): void {
     this.articleService.getAllArticles().subscribe(
       (response) => {
-        console.log('Fetched Articles:', response);
         this.articles = response.articles;
         this.totalArticles = response.articles.length;
         this.updateDisplayedArticles();
       },
       (error) => {
-        console.error('Error fetching articles:', error);
+        this.messageService.error(
+          'Failed to load articles. Please try again later.'
+        );
       }
     );
   }
@@ -106,19 +104,18 @@ editingArticleId: number | null = null;
     this.editingArticleId = article.id;
     this.openDialog(article);
   }
-  
 
   deleteArticle(articleId: number): void {
-    console.log('Delete article with ID:', articleId);
     this.articleService.deleteArticle(articleId).subscribe(
       () => {
-        console.log('Article deleted successfully');
         this.articles = this.articles.filter(
           (article) => article.id !== articleId
         );
       },
       (error) => {
-        console.error('Error deleting article:', error);
+        this.messageService.error(
+          'Failed to delete article. Please try again later.'
+        );
       }
     );
   }
@@ -133,7 +130,7 @@ editingArticleId: number | null = null;
     } else {
       this.regForm.reset();
     }
-  
+
     this.dialog.open(this.dialogTemplateRegister, {
       width: '600px',
     });
@@ -143,52 +140,55 @@ editingArticleId: number | null = null;
     this.editingArticleId = null;
     this.dialog.closeAll();
   }
-  
 
   submit() {
     if (this.regForm.valid) {
       const articleData = this.regForm.value;
-  
+
       if (this.editingArticleId) {
-        this.articleService.updateArticle(this.editingArticleId, articleData).subscribe(
-          () => {
-            console.log('Article updated successfully');
-            this.editingArticleId = null;
-            this.dialog.closeAll();
-            this.ngOnInit();
-          },
-          (error) => {
-            console.error('Error updating article:', error);
-          }
-        );
+        this.articleService
+          .updateArticle(this.editingArticleId, articleData)
+          .subscribe(
+            () => {
+              this.dialog.closeAll();
+              this.ngOnInit();
+            },
+            (error) => {
+              this.messageService.error(
+                'Failed to update article. Please try again later.'
+              );
+            }
+          );
       } else {
         // Add new article
         this.articleService.addArticle(articleData).subscribe(
           () => {
-            console.log('Article added successfully');
             this.dialog.closeAll();
             this.ngOnInit();
           },
           (error) => {
-            console.error('Error adding article:', error);
+            this.messageService.error(
+              'Failed to add article. Please try again later.'
+            );
           }
         );
       }
     } else {
-      console.error('Form is invalid');
+      this.messageService.error(
+        'Form is invalid. Please fill in all required fields.'
+      );
     }
   }
-  
 
-   onPageChange(event: PageEvent): void {
-      this.pageSize = event.pageSize;
-      this.currentPage = event.pageIndex;
-      this.updateDisplayedArticles();
-    }
-  
-    private updateDisplayedArticles(): void {
-      const startIndex = this.currentPage * this.pageSize;
-      const endIndex = startIndex + this.pageSize;
-      this.displayedArticles = this.articles.slice(startIndex, endIndex);
-    }
+  onPageChange(event: PageEvent): void {
+    this.pageSize = event.pageSize;
+    this.currentPage = event.pageIndex;
+    this.updateDisplayedArticles();
+  }
+
+  private updateDisplayedArticles(): void {
+    const startIndex = this.currentPage * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.displayedArticles = this.articles.slice(startIndex, endIndex);
+  }
 }

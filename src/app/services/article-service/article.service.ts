@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, EMPTY, Observable, tap } from 'rxjs';
 import { MessageService } from '../message-service/message.service';
 import { Router } from '@angular/router';
+import { ArticlesResponse } from '../../models/article/article';
 
 @Injectable({
   providedIn: 'root'
@@ -17,11 +18,11 @@ export class ArticleService {
 
   serverUrl: string = 'http://127.0.0.1:5000';
 
-  getAllArticles(): Observable<any> {
+  getAllArticles(): Observable<ArticlesResponse> {
     return this.httpClient
-      .get(`${this.serverUrl}/articles`)
+      .get<ArticlesResponse>(`${this.serverUrl}/articles`)
       .pipe(
-        tap((response: any) => {
+        tap((response: ArticlesResponse) => {
           if (response.articles) {
             this.messageService.success('Articles have been loaded');
           }
