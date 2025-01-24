@@ -5,12 +5,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ArticleService } from '../../services/article-service/article.service';
-import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ArticleDataDtoBase } from '../../models/article/article';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatIcon } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { MessageService } from '../../services/message-service/message.service';
 
 @Component({
   standalone: true,
@@ -24,14 +24,14 @@ import { MatSelectModule } from '@angular/material/select';
     MatPaginatorModule,
     MatIcon,
     MatSelectModule,
-    FormsModule
+    FormsModule,
   ],
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.css',
 })
 export class MainPageComponent implements OnInit {
   @ViewChild('dialogTemplateRegister')
-    dialogTemplateRegister!: TemplateRef<any>;
+  dialogTemplateRegister!: TemplateRef<any>;
 
   articles: ArticleDataDtoBase[] = [];
   displayedArticles: ArticleDataDtoBase[] = [];
@@ -42,7 +42,10 @@ export class MainPageComponent implements OnInit {
   categories: string[] = ['Technology', 'Science', 'Art', 'Health', 'Sports'];
   selectedCategory: string = '';
 
-  constructor(private articleService: ArticleService, private router: Router) {}
+  constructor(
+    private articleService: ArticleService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
     this.articleService.getAllArticles().subscribe(
@@ -52,7 +55,9 @@ export class MainPageComponent implements OnInit {
         this.updateDisplayedArticles();
       },
       (error) => {
-        console.error('Error fetching articles:', error);
+        this.messageService.error(
+          'Failed to load articles. Please try again later.'
+        );
       }
     );
   }

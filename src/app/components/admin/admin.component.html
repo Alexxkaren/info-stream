@@ -37,7 +37,7 @@
 
 <ng-template #dialogTemplateRegister let-data>
   <form [formGroup]="regForm" class="dialog-container" (ngSubmit)="submit()">
-    <h2>{{ editingArticleId ? 'Update Article' : 'Add an Article' }}</h2>
+    <h2>{{ editingArticleId ? "Update Article" : "Add an Article" }}</h2>
     <mat-form-field>
       <input matInput placeholder="Name" formControlName="title" required />
       @if(title?.errors?.['required']){
@@ -77,12 +77,11 @@
         type="submit"
         [disabled]="!regForm.valid"
       >
-      {{ editingArticleId ? 'Save' : 'Add' }}
+        {{ editingArticleId ? "Save" : "Add" }}
       </button>
     </div>
   </form>
 </ng-template>
-
 
 <mat-paginator
   [length]="totalArticles"

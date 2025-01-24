@@ -8,9 +8,14 @@
 
   <mat-form-field appearance="fill" class="category-filter">
     <mat-label>Filter by Category</mat-label>
-    <mat-select [(ngModel)]="selectedCategory" (selectionChange)="onCategoryChange()">
+    <mat-select
+      [(ngModel)]="selectedCategory"
+      (selectionChange)="onCategoryChange()"
+    >
       <mat-option value="">All</mat-option>
-      <mat-option *ngFor="let category of categories" [value]="category">{{ category }}</mat-option>
+      <mat-option *ngFor="let category of categories" [value]="category">{{
+        category
+      }}</mat-option>
     </mat-select>
   </mat-form-field>
 
