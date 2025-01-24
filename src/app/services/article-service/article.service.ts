@@ -15,7 +15,7 @@ export class ArticleService {
     private router: Router
   ) {}
 
-  serverUrl: string = 'http://infostream-core-gdaxc8guf3cpe5dz.westeurope-01.azurewebsites.net';
+  serverUrl: string = 'http://127.0.0.1:5000';
 
   getAllArticles(): Observable<any> {
     return this.httpClient

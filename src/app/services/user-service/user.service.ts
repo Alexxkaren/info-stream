@@ -18,8 +18,7 @@ export class UserService {
     private router: Router
   ) {}
 
-  serverUrl: string =
-    'http://infostream-core-gdaxc8guf3cpe5dz.westeurope-01.azurewebsites.net';
+  serverUrl: string = 'http://127.0.0.1:5000';
 
   navigateTo(page: string): void {
     this.router.navigate([page]);

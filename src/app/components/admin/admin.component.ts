@@ -29,6 +29,7 @@ import {
 } from '@angular/material/dialog';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-admin',
@@ -38,6 +39,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
     MatInputModule,
     MatButtonModule,
     MatIcon,
+    MatSelectModule,
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
@@ -56,6 +58,9 @@ export class AdminComponent {
   pageSize = 5;
   currentPage = 0;
   totalArticles = 0;
+categories: string[] = ['Technology', 'Science', 'Art', 'Health', 'Sports'];
+editingArticleId: number | null = null;
+
 
   constructor(private articleService: ArticleService, private router: Router) {}
 
@@ -98,9 +103,10 @@ export class AdminComponent {
   }
 
   updateArticle(article: ArticleDataDtoBase): void {
-    console.log('Update article:', article);
-    this.router.navigate(['/edit-article', article.id]);
+    this.editingArticleId = article.id;
+    this.openDialog(article);
   }
+  
 
   deleteArticle(articleId: number): void {
     console.log('Delete article with ID:', articleId);
@@ -117,32 +123,62 @@ export class AdminComponent {
     );
   }
 
-  openDialog(): void {
+  openDialog(article?: ArticleDataDtoBase): void {
+    if (article) {
+      this.regForm.patchValue({
+        title: article.title,
+        category: article.category,
+        content: article.content,
+      });
+    } else {
+      this.regForm.reset();
+    }
+  
     this.dialog.open(this.dialogTemplateRegister, {
       width: '600px',
     });
   }
 
   closeDialog(): void {
+    this.editingArticleId = null;
     this.dialog.closeAll();
   }
+  
 
   submit() {
     if (this.regForm.valid) {
-      console.log('Form data:', this.regForm.value);
-      this.dialog.closeAll();
-      this.articleService.addArticle(this.regForm.value).subscribe(
-        () => {
-          console.log('Article added successfully');
-        },
-        (error) => {
-          console.error('Error adding article:', error);
-        }
-      );
+      const articleData = this.regForm.value;
+  
+      if (this.editingArticleId) {
+        this.articleService.updateArticle(this.editingArticleId, articleData).subscribe(
+          () => {
+            console.log('Article updated successfully');
+            this.editingArticleId = null;
+            this.dialog.closeAll();
+            this.ngOnInit();
+          },
+          (error) => {
+            console.error('Error updating article:', error);
+          }
+        );
+      } else {
+        // Add new article
+        this.articleService.addArticle(articleData).subscribe(
+          () => {
+            console.log('Article added successfully');
+            this.dialog.closeAll();
+            this.ngOnInit();
+          },
+          (error) => {
+            console.error('Error adding article:', error);
+          }
+        );
+      }
     } else {
       console.error('Form is invalid');
     }
   }
+  
 
    onPageChange(event: PageEvent): void {
       this.pageSize = event.pageSize;
