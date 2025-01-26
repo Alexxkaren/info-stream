@@ -67,7 +67,6 @@ export class AdminComponent implements OnInit {
     }),
     category: new FormControl('', [
       Validators.required,
-      Validators.minLength(3),
     ]),
     content: new FormControl('', [
       Validators.required,
@@ -122,12 +121,14 @@ export class AdminComponent implements OnInit {
 
   openDialog(article?: ArticleDataDtoBase): void {
     if (article) {
+      this.editingArticleId = article.id;
       this.regForm.patchValue({
         title: article.title,
         category: article.category,
         content: article.content,
       });
     } else {
+      this.editingArticleId = null;
       this.regForm.reset();
     }
 

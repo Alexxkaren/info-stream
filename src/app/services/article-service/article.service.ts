@@ -13,7 +13,6 @@ export class ArticleService {
   constructor(
     private httpClient: HttpClient,
     private messageService: MessageService,
-    private router: Router
   ) {}
 
   serverUrl: string = 'http://127.0.0.1:5000';
