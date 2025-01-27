@@ -9,6 +9,7 @@ To set up and run the application on your system, follow these steps:
 1. Installation Process Clone the repository:
 ```bash
 git clone <repository_url>
+cd info-stream
 ```
 Install the required dependencies using npm:
 
@@ -23,6 +24,19 @@ npm start
 ```
 
 Open http://localhost:4200 in your browser to access the application.
+
+Install the required dependencies for the server:
+
+Check if you have Python installed:
+
+```bash
+py --version
+```
+Install dependencies:
+
+```bash
+pip install flask flask-sqlalchemy flask-cors werkzeug pyjwt
+```
 
 3. Running the Development Server - BACKEND
 ```bash
